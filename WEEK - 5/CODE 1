@@ -1,0 +1,33 @@
+#include <stdio.h>
+void quickSort(int arr[], int low, int high) {
+    if (low < high) {
+        int pivot = arr[low];
+        int i = low;
+        int j = high;
+        int temp;
+        while (i < j) {
+            while (arr[j] > pivot && i < j) j--;
+            while (arr[i] <= pivot && i < j) i++;
+            if (i < j) {
+                temp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = temp;
+            }
+        }
+        temp = arr[low];
+        arr[low] = arr[i];
+        arr[i] = temp;
+
+        quickSort(arr, low, i - 1);
+        quickSort(arr, i + 1, high);
+    }
+}
+int main() {
+    int data[] = {57,10,47,22,22,49,51,41,23,12,17,33};
+    int n = 12;
+    quickSort(data, 0, n - 1);
+    for (int i = 0; i < n; i++) printf("%d ", data[i]);
+    return 0;
+}
+
+
