@@ -1,0 +1,51 @@
+#include <stdio.h>
+struct Job {
+    char id;
+    int dead, profit;
+};
+
+int main() {
+    int n, maxD = 0, totalP = 0;
+    printf("Number of jobs: ");
+    scanf("%d", &n);
+    struct Job arr[n];
+
+    for(int i=0; i<n; i++) {
+        printf("Job %d (ID Deadline Profit): ", i+1);
+        // Added space before %c to prevent the double-prompt bug
+        scanf(" %c %d %d", &arr[i].id, &arr[i].dead, &arr[i].profit);
+        if(arr[i].dead > maxD) maxD = arr[i].dead;
+    }
+
+    for(int i=0; i<n-1; i++) {
+        for(int j=0; j<n-i-1; j++) {
+            if(arr[j].profit < arr[j+1].profit) {
+                struct Job tmp = arr[j];
+                arr[j] = arr[j+1];
+                arr[j+1] = tmp;
+            }
+        }
+    }
+
+    int slot[maxD];
+    char res[maxD];
+    for(int i=0; i<maxD; i++) slot[i] = 0;
+
+    for(int i=0; i<n; i++) {
+        for(int j = (arr[i].dead < maxD ? arr[i].dead : maxD) - 1; j >= 0; j--) {
+            if(slot[j] == 0) {
+                res[j] = arr[i].id;
+                slot[j] = 1;
+                totalP += arr[i].profit;
+                break;
+            }
+        }
+    }
+
+    printf("\nSequence: ");
+    for(int i=0; i<maxD; i++) if(slot[i]) printf("%c ", res[i]);
+    printf("\nTotal Profit: %d\n", totalP);
+    return 0;
+}
+
+
